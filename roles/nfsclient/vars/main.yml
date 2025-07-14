@@ -1,0 +1,4 @@
+---
+# vars file for nfsclient
+sharepath: /www1
+mountip: '192.168.10.10'

@@ -1,0 +1,24 @@
+---
+- name: 1) web 자동 설정
+  hosts: webservers
+  become: true
+  tasks:
+    - name: 1. web 설정
+      ansible.builtin.include_role:
+        name: "{{ item }}"
+      vars:
+        pkg:
+          - httpd
+          - mod_ssl
+          - firewalld
+          - openssl
+          - java-17-openjdk
+        svc:
+          - httpd
+          - firewalld
+        fw_svc:
+          - http
+          - https
+      loop:
+        - common
+        - web

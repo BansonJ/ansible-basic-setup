@@ -1,0 +1,22 @@
+---
+# tasks file for common
+- name: 패키지 설치
+  ansible.builtin.yum:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ pkg }}"
+
+- name: 서비스 시작
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: started
+    enabled: true
+  loop: "{{ svc }}"
+
+- name: 방화벽 등록
+  ansible.posix.firewalld:
+    service: "{{ item }}"
+    permanent: true
+    immediate: true
+    state: enabled
+  loop: "{{ fw_svc }}"

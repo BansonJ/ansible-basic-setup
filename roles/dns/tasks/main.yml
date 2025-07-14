@@ -1,0 +1,46 @@
+---
+# tasks file for dns
+##################################
+# 0) 패키지 설치(common) - bind, bind-utils, firewalld
+#    서비스 시작(common) - named, firewalld
+#    방화벽 등록(common) - dns
+# 1) 시스템 설정 - /etc/named.conf
+# 1) 시스템 설정 - /etc/named.rfc1912.zones
+# 2) zone 등록 - /var/named/*.zone - service 재시작 handlers
+# 3) /etc/resolv.conf 설정
+###################################
+- name: 1) 시스템 설정 - /etc/named.conf
+  ansible.builtin.copy:
+    src: files/named.conf
+    dest: /etc/named.conf
+    owner: root
+    group: named
+    mode: '0640'
+
+- name: 1) 시스템 설정 - /etc/named.rfc1912.zones
+  ansible.builtin.blockinfile:
+    path: /etc/named.rfc1912.zones
+    block: |
+      zone "{{ zone_name }}.com" IN {
+              type master;
+              file "{{ zone_name }}.zone";
+      };
+
+      zone "{{ rfc_ip }}.in-addr.arpa" IN {
+              type master;
+              file "{{ zone_name }}.rev";
+      };
+
+- name: 2) zone 등록 - /var/named/*.zone - service 재시작 handlers
+  ansible.builtin.template:
+    src: zone.j2
+    dest: /var/named/{{ zone_name }}.zone
+    owner: root
+    group: named
+    mode: '0640'
+  notify: Restart named
+
+- name: 3) /etc/resolv.conf 설정
+  ansible.builtin.command:
+    cmd: nmcli connection modify eth0 ipv4.dns "{{ ipv4 }}" +ipv4.dns 8.8.8.8 ipv4.dns-search example.com
+  notify: Restart nmcli

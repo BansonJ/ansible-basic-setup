@@ -1,0 +1,29 @@
+---
+- name: Mail server
+  hosts: mailservers
+  become: true
+  tasks:
+    - name: Mail server 구성
+      ansible.builtin.include_role:
+        name: "{{ item }}"
+      vars:
+        pkg:
+          - postfix
+          - firewalld
+          - s-nail
+          - dovecot
+        svc:
+          - postfix
+          - dovecot
+          - firewalld
+        fw_svc:
+          - smtp
+          - smtps
+          - smtp-submission
+          - pop3
+          - pop3s
+          - imap
+          - imaps
+      loop:
+        - common
+        - mail

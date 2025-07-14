@@ -1,0 +1,7 @@
+---
+# handlers file for nfsclient
+- name: Restart httpd
+  ansible.builtin.service:
+    name: httpd
+    state: restarted
+    enabled: true

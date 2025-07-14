@@ -1,0 +1,21 @@
+---
+- name: 1) dns 포워딩 서버 자동 설정
+  hosts: ansible
+  become: true
+  tasks:
+    - name: 1. dns 저장
+      ansible.builtin.include_role:
+        name: "{{ item }}"
+      vars:
+        pkg:
+          - bind
+          - bind-utils
+          - firewalld
+        svc:
+          - named
+          - firewalld
+        fw_svc: 
+          - dns
+      loop:
+        - common
+        - dns

@@ -1,0 +1,11 @@
+$TTL 4
+@       IN SOA  ns1.{{ zone_name }}.com. root.{{ zone_name }}.com. (
+                                        10      ; serial
+                                        1D      ; refresh
+                                        1H      ; retry
+                                        1W      ; expire
+                                        3H )    ; minimum
+
+;;; DNS Server 
+{{ zone_name }}.com.            IN  NS      ns1.{{ zone_name }}.com.
+ns1.{{ zone_name }}.com.        IN  A       192.168.10.10

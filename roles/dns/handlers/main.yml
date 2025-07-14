@@ -1,0 +1,10 @@
+---
+# handlers file for dns
+- name: Restart named
+  ansible.builtin.service:
+    name: named
+    state: restarted
+
+- name: Restart nmcli
+  ansible.builtin.command:
+    cmd: nmcli connection up eth0

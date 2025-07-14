@@ -1,0 +1,13 @@
+---
+# handlers file for web
+- name: Restart bashrc
+  ansible.builtin.command:
+    cmd: sudo source ~/.bashrc
+
+- name: Restart httpd and tomcat
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: restarted
+  loop:
+    - httpd
+    - tomcat

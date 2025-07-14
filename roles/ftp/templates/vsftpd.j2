@@ -1,0 +1,26 @@
+anonymous_enable=YES
+local_enable=YES
+write_enable=YES
+local_umask=022
+dirmessage_enable=YES
+xferlog_enable=YES
+connect_from_port_20=YES
+xferlog_std_format=YES
+listen=NO
+listen_ipv6=YES
+
+pam_service_name=vsftpd
+userlist_enable=YES
+
+idle_session_timeout=1000
+data_connection_timeout=1000
+
+ftpd_banner=Welcome to hyun's FTP service.
+
+chroot_local_user=YES
+allow_writeable_chroot=YES
+chroot_list_enable=YES
+chroot_list_file=/etc/vsftpd/chroot_list
+
+max_clients=5
+max_per_ip=3

@@ -1,0 +1,28 @@
+---
+- name: Common config
+  hosts: ftpcommonservers
+  become: true
+  tasks:
+    - name: 기본 설정
+      ansible.builtin.include_role:
+        name: "{{ item }}"
+      vars:
+        pkg:
+          - vsftpd
+          - ftp
+          - firewalld
+        svc:
+          - vsftpd
+          - firewalld
+        fw_svc:
+          - ftp
+      loop:
+        - common
+
+- name: FTP
+  hosts: ftpservers
+  become: true
+  tasks:
+    - name: FTP 설정
+      ansible.builtin.include_role:
+        name: ftp

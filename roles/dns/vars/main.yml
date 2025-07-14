@@ -1,0 +1,5 @@
+---
+# vars file for dns
+zone_name: hyun
+rfc_ip: 10.168.192
+ipv4: 192.168.10.10

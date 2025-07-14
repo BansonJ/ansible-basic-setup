@@ -1,0 +1,33 @@
+---
+# tasks file for nfsclient
+########################
+# 0) 패키지 설치 - httpd, mod_ssl
+#   방화벽 구성 - http, https
+#   서비스 시작 - httpd
+# 1) directory 생성 - {{ sharepath }}
+# 2) 마운트 - {{ mountip }}:{{ sharepath }}
+# 3) 웹 설정 파일 - vhost.conf
+#########################
+- name: 1) directory 생성 - {{ sharepath }}
+  ansible.builtin.file:
+    path: "{{ sharepath }}"
+    state: directory
+    mode: '0755'
+
+- name: 2) 마운트 - {{ mountip }}:{{ sharepath }}
+  ansible.posix.mount:
+    src: "{{ mountip }}:{{ sharepath }}"
+    path: "{{ sharepath }}"
+    opts: defaults
+    state: mounted
+    fstype: nfs
+
+- name: 3) 웹 설정 파일 - vhost.conf
+  ansible.builtin.template:
+    src: vhost.j2
+    dest: /etc/httpd/conf.d/vhost.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart httpd
+  changed_when: true

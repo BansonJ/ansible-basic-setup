@@ -1,0 +1,21 @@
+---
+# tasks file for mail
+- name: Postfix 파일 설정 - /etc/postfix/main.cf
+  ansible.builtin.template:
+    src: main.cf.j2
+    dest: /etc/postfix/main.cf
+    owner: root
+    group: root
+    mode: '0644'
+  changed_when: true
+  notify: Restart postfix
+
+- name: Dovecot 파일 설정 - /etc/dovecot/dovecot.conf
+  ansible.builtin.template:
+    src: main.cf.j2
+    dest: /etc/postfix/main.cf
+    owner: root
+    group: root
+    mode: '0644'
+  changed_when: true
+  notify: Restart postfix

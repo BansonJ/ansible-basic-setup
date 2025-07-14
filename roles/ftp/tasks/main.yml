@@ -1,0 +1,26 @@
+---
+# tasks file for ftp
+########################
+# 0) 패키지 설치 - vsftpd, ftp
+#   방화벽 구성 - ftp
+#   서비스 시작 - vsftpd
+# 1) 설정 파일 변경 - /etc/vsftpd/vsftpd.conf
+# 2) file 생성 - chroot_list
+#########################
+- name: 1) 설정 파일 변경 - /etc/vsftpd/vsftpd.conf
+  ansible.builtin.template:
+    src: vsftpd.j2
+    dest: /etc/vsftpd/vsftpd.conf
+    owner: root
+    group: root
+    mode: '0600'
+  notify: Restart vsftpd
+  changed_when: true
+
+- name: 2) file 생성 - chroot_list
+  ansible.builtin.copy:
+    content: 'root'
+    dest: /etc/vsftpd/chroot_list
+    owner: root
+    group: root
+    mode: '0600'

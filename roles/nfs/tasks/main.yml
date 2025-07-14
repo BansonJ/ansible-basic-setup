@@ -1,0 +1,41 @@
+---
+# tasks file for nfs
+# dns 등록은 따로할 것!
+########################
+# 0) 패키지 설치 - nfs-utils
+#   방화벽 구성 - nfs, rpc-bind, mountd
+#   서비스 시작 - nfs-server
+# 1) directory 생성 - {{ sharepath }}/cgi-bin
+# 2) test index 생성 - {{ sharepath }}"/cgi-bin/test.cgi
+# 3) 공유 파일 생성 - /etc/exports
+#########################
+- name: 1) directory 생성 - {{ sharepath }}/cgi-bin
+  ansible.builtin.file:
+    path: "{{ sharepath }}/cgi-bin"
+    state: directory
+    mode: '0755'
+
+- name: 2) test index 생성 - {{ sharepath }}/cgi-bin/test.cgi
+  ansible.builtin.template:
+    src: testIndex.j2
+    dest: "{{ sharepath }}/cgi-bin/test.cgi"
+    owner: root
+    group: root
+    mode: '0555'
+
+- name: 3) 공유 파일 생성 - /etc/exports
+  ansible.builtin.lineinfile:
+    path: /etc/exports
+    line: '{{ sharepath }}  {{ shareip }}(rw,no_root_squash,nohide,subtree_check)'
+  changed_when: true
+  notify: Restart nfs-server
+
+- name: 4) proxy 설정 - /etc/haproxy/haproxy.cfg
+  ansible.builtin.template:
+    src: haproxy.j2
+    dest: /etc/haproxy/haproxy.cfg
+    owner: root
+    group: root
+    mode: '0644'
+  changed_when: true
+  notify: Restart haproxy

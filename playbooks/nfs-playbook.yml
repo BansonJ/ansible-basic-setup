@@ -1,0 +1,46 @@
+---
+- name: NFS server
+  hosts: nfsservers
+  become: true
+  tasks:
+    - name: NFS server 설정
+      ansible.builtin.include_role:
+        name: "{{ item }}"
+      vars:
+        pkg:
+          - nfs-utils
+          - firewalld
+          - haproxy
+        svc:
+          - nfs-server
+          - firewalld
+        fw_svc:
+          - nfs
+          - mountd
+          - rpc-bind
+      loop:
+        - common
+        - nfs
+
+- name: NFS client
+  hosts: nfsclients
+  become: true
+  gather_facts: true
+  tasks:
+    - name: NFS client 설정
+      ansible.builtin.include_role:
+        name: "{{ item }}"
+      vars:
+        pkg:
+          - httpd
+          - firewalld
+          - nfs-utils
+        svc:
+          - httpd
+          - firewalld
+        fw_svc:
+          - http
+          - https
+      loop:
+        - common
+        - nfsclient
