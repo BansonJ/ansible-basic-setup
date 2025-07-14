@@ -1,2 +1,4 @@
 ---
 # vars file for mail
+dns: jeong.com
+iprange: 192.168.10.0/24

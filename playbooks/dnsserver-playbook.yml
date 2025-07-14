@@ -14,7 +14,7 @@
         svc:
           - named
           - firewalld
-        fw_svc: 
+        fw_svc:
           - dns
       loop:
         - common

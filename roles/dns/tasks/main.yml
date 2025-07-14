@@ -18,9 +18,9 @@
     mode: '0640'
 
 - name: 1) 시스템 설정 - /etc/named.rfc1912.zones
-  ansible.builtin.blockinfile:
+  ansible.builtin.lineinfile:
     path: /etc/named.rfc1912.zones
-    block: |
+    line: |
       zone "{{ zone_name }}.com" IN {
               type master;
               file "{{ zone_name }}.zone";
@@ -31,16 +31,16 @@
               file "{{ zone_name }}.rev";
       };
 
-- name: 2) zone 등록 - /var/named/*.zone - service 재시작 handlers
+- name: 2) zone 등록 - /var/named/{{ zone_name }}.zone - service 재시작 handlers
   ansible.builtin.template:
     src: zone.j2
     dest: /var/named/{{ zone_name }}.zone
-    owner: root
+    owner: named
     group: named
     mode: '0640'
   notify: Restart named
 
-- name: 3) /etc/resolv.conf 설정
+- name: 3) 질의 서버 지정 - /etc/resolv.conf
   ansible.builtin.command:
     cmd: nmcli connection modify eth0 ipv4.dns "{{ ipv4 }}" +ipv4.dns 8.8.8.8 ipv4.dns-search example.com
   notify: Restart nmcli

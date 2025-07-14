@@ -3,6 +3,10 @@
   hosts: mailservers
   become: true
   tasks:
+  ##############################
+  # zone name과 inventory를 바꿔 각 서버마다 실행할 것.
+  # dns 설정은 따로 추가할 것.
+  ##############################
     - name: Mail server 구성
       ansible.builtin.include_role:
         name: "{{ item }}"

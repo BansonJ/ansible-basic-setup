@@ -1,0 +1,10 @@
+mail_location = mbox:~/mail:INBOX=/var/mail/%u
+namespace inbox {
+  inbox = yes
+}
+mail_access_groups = mail
+lock_method = fcntl
+first_valid_uid = 1000
+protocol !indexer-worker {
+}
+mbox_write_locks = fcntl

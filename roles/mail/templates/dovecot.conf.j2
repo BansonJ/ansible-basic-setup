@@ -1,0 +1,8 @@
+protocols = imap pop3 lmtp submission
+listen = *, ::
+base_dir = /var/run/dovecot/
+dict {
+  #quota = mysql:/etc/dovecot/dovecot-dict-sql.conf.ext
+}
+!include conf.d/*.conf
+!include_try local.conf

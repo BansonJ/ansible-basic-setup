@@ -5,3 +5,9 @@
     name: postfix
     state: restarted
     enabled: true
+
+- name: Restart dovecot
+  ansible.builtin.systemd:
+    name: dovecot
+    state: restarted
+    enabled: true
